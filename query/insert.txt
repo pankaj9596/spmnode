@@ -1,0 +1,92 @@
+insert into sp.T_NAME_TITLE values ("TIT_00001","2022_RET_00001","MR","Mr.","Mister");
+insert into sp.T_NAME_TITLE values ("TIT_00002","2022_RET_00001","MRS","Mrs.","Mistress");
+
+
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00001","OWNSHIP",	"10","Coporation","Ownership Type for Corporation",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00002","OWNSHIP",	"20","Joint Venture","Ownership Type for Joint Venture",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00003","OWNSHIP",	"30","Limited Liability Corporation","Ownership Type for Limited Liability Corporation",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00004","OWNSHIP",	"40","Limited Liability Partnership","Ownership Type for Limited Liability Partnership",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00005","OWNSHIP",	"50","Partnership","Ownership Type for Partnership",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00006","OWNSHIP",	"60","Sole Proprietorship","Ownership Type for Sole Proprietorship",current_timestamp,'2037-12-31 15:52:00');
+
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00007","STOREFMT","10","Outlet Store","Store Format",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00008","STOREFMT","20","Convention","Store Format",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00009","STOREFMT","30","Warehouse","Store Format",current_timestamp,'2037-12-31 15:52:00');
+
+
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00010","ADRTYPE","10","Registered Office Address","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00011","ADRTYPE","20","Regional Office Address","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00012","ADRTYPE","30","Correspondence Address","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00013","ADRTYPE","40","Payment Address","",current_timestamp,'2037-12-31 15:52:00','SUPPLIER');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00014","ADRTYPE","50","Warehouse Address","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00015","ADRTYPE","60","Distribution Centre","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00016","ADRTYPE","70","Store Address","",current_timestamp,'2037-12-31 15:52:00','RETAILER');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00017","ADRTYPE","80","Other Address","",current_timestamp,'2037-12-31 15:52:00','ALL');
+
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00018","VENDTYPE","10","Outright","Vendor Type",current_timestamp,'2037-12-31 15:52:00',"");
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00019","VENDTYPE","20","Concessionaire","Vendor Type",current_timestamp,'2037-12-31 15:52:00',"");
+
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00020","EMPCNT","10","1 - 50","Very Smaill Size of Employee",current_timestamp,'2037-12-31 15:52:00',"");
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00021","EMPCNT","20","50 - 100","Small Size of Employee",current_timestamp,'2037-12-31 15:52:00',"");
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00022","EMPCNT","30","100 - 200","Medium Size of Employee",current_timestamp,'2037-12-31 15:52:00',"");
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00023","EMPCNT","40","200 - 1000","Large Size of Employee",current_timestamp,'2037-12-31 15:52:00',"");
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00024","EMPCNT","50","> 1000","Very Large Size of Employee",current_timestamp,'2037-12-31 15:52:00',"");
+
+
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00025","CONTACTTYPE","10","Primary","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00025","CONTACTTYPE","20","Chairman","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00025","CONTACTTYPE","30","Directors","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00025","CONTACTTYPE","40","Sole Proprietors","",current_timestamp,'2037-12-31 15:52:00','ALL');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00025","CONTACTTYPE","50","Partnership Holders","",current_timestamp,'2037-12-31 15:52:00','ALL');
+
+
+
+
+
+insert into T_BUSINESS values ("BUS_00001","2022_RET_00001","10","DISTRBTR","Distributor");
+insert into T_BUSINESS values ("BUS_00002","2022_RET_00001","20","MANFCTR","Manufacturer");
+insert into T_BUSINESS values ("BUS_00003","2022_RET_00001","30","LICNSE","Licensee");
+insert into T_BUSINESS values ("BUS_00004","2022_RET_00001","40","WHOLSL","Wholesaler");
+insert into T_BUSINESS values ("BUS_00005","2022_RET_00001","50","IMPORTR","Importer");
+insert into T_BUSINESS values ("BUS_00006","2022_RET_00001","60","BROKR","Broker");
+insert into T_BUSINESS values ("BUS_00007","2022_RET_00001","70","SERVPRDR","Service Provider");
+
+
+
+
+
+
+
+
+INSERT INTO sp.T_COUNTRY values ("+91","India","India",true);
+INSERT INTO sp.T_COUNTRY values ("+1","USA","USA",true);
+INSERT INTO sp.T_COUNTRY values ("+63","Philipines","Philipines",true);
+INSERT INTO sp.T_COUNTRY values ("+84","Vietnam","Vietnam",true);
+INSERT INTO sp.T_COUNTRY values ("+65","Singapore","Singapore",true);
+INSERT INTO sp.T_COUNTRY values ("+66","Thailand","Thailand",true);
+INSERT INTO sp.T_COUNTRY values ("+62","Indonesia","Indonesia",true);
+INSERT INTO sp.T_COUNTRY values ("+60","Malaysia","Malaysia",true);
+
+
+
+insert into sp.T_DEPARTMENT values ("DEPT_00001","2022_RET_00001","10","Beverages","Beverages",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_DEPARTMENT values ("DEPT_00002","2022_RET_00001","20","Grocery",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_DEPARTMENT values ("DEPT_00003","2022_RET_00001","30","Personal Care",true,false,current_timestamp,'2037-12-31 15:52:00');
+
+
+
+
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00001","2022_RET_00001","DEPT_00001","10","Water",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00002","2022_RET_00001","DEPT_00001","20","Coffee",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00003","2022_RET_00001","DEPT_00001","30","Carbonated Soft Drink",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00004","2022_RET_00001","DEPT_00002","10","Cookies",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00005","2022_RET_00001","DEPT_00002","20","Confectionary",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00006","2022_RET_00001","DEPT_00003","10","Fragrances",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_SUB_DEPARTMENT values ("SUBDEPT_00007","2022_RET_00001","DEPT_00003","20","Laundry",true,false,current_timestamp,'2037-12-31 15:52:00');
+
+
+
+
+insert into sp.T_PAYMENT values ("2022_RET_00001","PT001","10","Cash","Cash",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_PAYMENT values ("2022_RET_00001","PT002","20","Cheque","Cheque",true,false,current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_PAYMENT values ("2022_RET_00001","PT003","30","Internet Banking","Internet Banking",true,false,current_timestamp,'2037-12-31 15:52:00');
