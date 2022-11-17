@@ -29,6 +29,40 @@ const getState = async (req, res, next) => {
     const result = await masterRepository.getState(req.db);
     res.status(200).send(result)
 }
+const getDepartment = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getDepartment(req.db);
+    res.status(200).send(result);
+};
+const getSubDepartment = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getSubDepartment(req.db);
+    res.status(200).send(result);
+};
+const getPaymentMethod = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getPaymentMethod(req.db);
+    res.status(200).send(result);
+};
+
+const getAddressType = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getAddressType(req.db);
+    res.status(200).send(result);
+};
+
+const getVendorType = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getVendorType(req.db);
+    res.status(200).send(result);
+};
+
+const getEmpCountForStore = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getEmpCountForStore(req.db);
+    res.status(200).send(result);
+};
+
 
 const getBatchData = async (req, res, next) => {
     const body = req.body;
@@ -38,7 +72,13 @@ const getBatchData = async (req, res, next) => {
         "OWNERSHIP": "getOwnerShipList",
         "STORE-FORMAT": "getStoreFormat",
         "COUNTRY-CODE": "getCountryCode",
-        "STATE": "getState"
+        "STATE": "getState",
+        "DEPARTMENT": "getDepartment",
+        "SUBDEPARTMENT": "getSubDepartment",
+        "PAYMENT-METHOD": "getPaymentMethod",
+        "ADDRESSTYPE": "getAddressType",
+        "VENDORTYPE": "getVendorType",
+        "EMP-COUNT-FOR-STORE": "getEmpCountForStore"
     }
     if (!body) {
         res.status(400).send("Please send object list");
@@ -53,4 +93,7 @@ const getBatchData = async (req, res, next) => {
     body.forEach((k, i) => { output[k] = result[i] })
     res.status(200).send(output);
 }
-module.exports = { getTitle, getOwnerShipList, getBusinessCode, getBatchData, getStoreFormat, getCountryCode, getState }
+module.exports = {
+    getTitle, getOwnerShipList, getBusinessCode, getBatchData, getStoreFormat, getCountryCode, getState,
+    getDepartment, getSubDepartment, getPaymentMethod, getAddressType, getVendorType, getEmpCountForStore,
+}
