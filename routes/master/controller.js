@@ -63,7 +63,6 @@ const getEmpCountForStore = async (req, res, next) => {
     res.status(200).send(result);
 };
 
-
 const getBatchData = async (req, res, next) => {
     const body = req.body;
     const mapping = {

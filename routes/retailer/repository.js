@@ -12,7 +12,8 @@ class RetailerRepository {
     async addPlatformRequest(dbClient, body) {
 
         //save Addresss, get ID save it in AddressID
-        //master emp count 
+
+
 
         const COLUMN_NAMES = Object.keys(body).join(",");
         const length = Object.keys(body).length;
