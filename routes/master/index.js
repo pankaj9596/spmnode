@@ -1,0 +1,11 @@
+const express = require("express");
+const controller = require("./controller");
+const router = express.Router();
+router.get("/title", controller.getTitle);
+router.get("/ownership", controller.getOwnerShipList);
+router.get("/business-code", controller.getBusinessCode);
+router.get("/store-format", controller.getStoreFormat);
+router.get("/country-code", controller.getCountryCode);
+router.get("/state", controller.getState);
+router.post("/batch", controller.getBatchData);
+module.exports = router;
