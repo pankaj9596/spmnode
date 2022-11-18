@@ -1,4 +1,4 @@
 module.exports = function (app) {
     app.use("/master", require("./master"));
-    app.use("/retailer", require("./retailer"));
+    app.use("/platformrequest", require("./platformrequest"));
 }

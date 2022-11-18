@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const envConfig = require("./config");
+const envConfig = require("../config");
 async function initDB() {
     const sequelizeConn = new Sequelize(envConfig.database, envConfig.user, envConfig.password, {
         dialect: 'mysql',
