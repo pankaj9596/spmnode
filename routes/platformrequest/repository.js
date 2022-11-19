@@ -59,6 +59,11 @@ class RetailerRepository {
                 status_code: 400, response: { message: "Platform request is not present" }
             }
         }
+        if (oPlatformRequest.STATUS === "PFADMINAPPROVED" || oPlatformRequest.STATUS === "PFADMINREJECTED") {
+            return {
+                status_code: 422, response: { message: "Platform request is already approved or rejected" }
+            }
+        }
         if (body.ACTION === "APPROVE") {
 
             const RETSEQID = uuidv4();

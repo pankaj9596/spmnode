@@ -1,4 +1,6 @@
 const RetailerRepository = require("./repository")
+const Ajv = require("ajv")
+const ajv = new Ajv()
 const controller = {
     registerRetailer: async (req, res, next) => {
         try {
@@ -50,6 +52,25 @@ const controller = {
     executeAction: async (req, res, next) => {
         try {
             const body = req.body[0];
+            // const schema = {
+            //     type: "object",
+            //     properties: {
+            //         PFSEQID: { type: "string" },
+            //         ACTION: { type: "string" },
+            //         REMARKS: { type: "string" }
+            //     },
+            //     required: ["PFSEQID", "ACTION"],
+            //     additionalProperties: false
+            // }
+
+            // const validate = ajv.compile(schema)
+
+            // const valid = validate(body)
+            // if (!valid) {
+            //     res.status(400).send(validate.errors)
+            // }
+
+
             if (!body.PFSEQID || !body.ACTION) {
                 res.status(400).send({ message: "Please send PFSEQID and ACTION" });
                 return;
