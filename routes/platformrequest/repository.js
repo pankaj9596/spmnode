@@ -1,22 +1,37 @@
 const e = require("express");
 const uuidv4 = require("../../util/uuid")
+const { createFilter } = require('odata-v4-mysql');
 class RetailerRepository {
     constructor() {
 
     }
     async getAllRequest(dbClient, queryParam) {
-        const query = `SELECT * FROM T_PLATFORM_REQ_MASTER`;
+        let query = `SELECT * FROM T_PLATFORM_REQ_MASTER WHERE ACTIVE = TRUE`, aParam = [];
+        if (queryParam.$filter) {
+            const filter = createFilter(queryParam.$filter);
+            query += ` AND ${filter.where}`;
+            aParam.push(...filter.parameters);
+        }
         const [result] = await dbClient.query(query, {
-            replacements: []
+            replacements: aParam
         });
         return result
     }
     async getPlatformRequest(dbClient, PFSEQID) {
-        const query = `SELECT * FROM T_PLATFORM_REQ_MASTER WHERE PFSEQID = ?`;
+        const query = `SELECT * FROM T_PLATFORM_REQ_MASTER WHERE PFSEQID = ? AND ACTIVE = TRUE`;
         const [result] = await dbClient.query(query, {
             replacements: [PFSEQID]
         });
         return result[0]
+    }
+    async updatePlatformRequest(dbClient, oPlatformRequest, PFSEQID) {
+
+        const sFields = Object.keys(oPlatformRequest).join(" = ? ,");
+        const sParam = Object.values(oPlatformRequest);
+        const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${sFields} = ? WHERE PFSEQID = ?`;
+        await dbClient.query(query, {
+            replacements: [...sParam, PFSEQID]
+        });
     }
     async getByEmailID(dbClient, emailID) {
         const query = `SELECT * FROM T_PLATFORM_REQ_MASTER WHERE EMAIL_ID = ?`;
@@ -67,6 +82,7 @@ class RetailerRepository {
         if (body.ACTION === "APPROVE") {
 
             const RETSEQID = uuidv4();
+
             const query = `UPDATE T_PLATFORM_REQ_MASTER SET GENERATED_ID = ?, STATUS = ?, PF_ADMIN_REMARKS = ?, PF_ACTIONED_ON = current_timestamp ,
             PF_ACTIONED_BY = ? WHERE PFSEQID = ?`;
             await dbClient.query(query, {

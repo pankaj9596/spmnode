@@ -62,9 +62,7 @@ const controller = {
             //     required: ["PFSEQID", "ACTION"],
             //     additionalProperties: false
             // }
-
             // const validate = ajv.compile(schema)
-
             // const valid = validate(body)
             // if (!valid) {
             //     res.status(400).send(validate.errors)
