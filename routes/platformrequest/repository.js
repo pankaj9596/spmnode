@@ -1,4 +1,3 @@
-const e = require("express");
 const uuidv4 = require("../../util/uuid")
 const { createFilter } = require('odata-v4-mysql');
 class RetailerRepository {

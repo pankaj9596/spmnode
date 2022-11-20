@@ -23,7 +23,6 @@ const controller = {
                     res.status(400).send({ message: "Unknown action" });
                     break;
             }
-
         } catch (err) {
             console.log(err);
             res.status(500).send(err.toString())
@@ -31,23 +30,33 @@ const controller = {
 
     },
     getAllRequest: async (req, res, next) => {
-        const retailerRepository = new RetailerRepository();
-        const result = await retailerRepository.getAllRequest(req.db, req.query);
-        res.status(200).send(result)
+        try {
+            const retailerRepository = new RetailerRepository();
+            const result = await retailerRepository.getAllRequest(req.db, req.query);
+            res.status(200).send(result);
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.toString())
+        }
     },
     validateEmail: async (req, res, next) => {
-        const emailID = req.query.emailID;
-        if (!emailID) {
-            res.status(400).send("Please send emailID as request parameter");
-            return;
+        try {
+            const emailID = req.query.emailID;
+            if (!emailID) {
+                res.status(400).send("Please send emailID as request parameter");
+                return;
+            }
+            const retailerRepository = new RetailerRepository();
+            const result = await retailerRepository.getByEmailID(req.db, emailID);
+            if (!result || result.length < 1) {
+                res.status(200).send({ message: "EMail ID does not exists" });
+                return;
+            }
+            res.status(400).send({ message: "EMail ID already exists", data: result });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.toString())
         }
-        const retailerRepository = new RetailerRepository();
-        const result = await retailerRepository.getByEmailID(req.db, emailID);
-        if (!result || result.length < 1) {
-            res.status(200).send({ message: "EMail ID does not exists" });
-            return;
-        }
-        res.status(400).send({ message: "EMail ID already exists", data: result })
     },
     executeAction: async (req, res, next) => {
         try {
