@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "watch",
+			"problemMatcher": [],
+			"label": "npm: watch",
+			"detail": "start server"
+		},
+		{
+			"type": "shell",
+			"command": "${workspaceFolder}/.vscode/GCPDeploy.cmd",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"label": "Deploy to GCP",
+			"detail": "Deploy to GCP"
+		}
+	]
+}
