@@ -4,4 +4,5 @@ const router = express.Router();
 router.route("/guest")
     .get(controller.getAllGuest)
     .post(controller.registerGuest);
+router.get("/guest/validate", controller.validateEmail);
 module.exports = router;

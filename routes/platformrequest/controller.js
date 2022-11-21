@@ -40,7 +40,7 @@ const controller = {
         try {
             const emailID = req.query.emailID;
             if (!emailID) {
-                res.status(400).send("Please send emailID as request parameter");
+                res.status(400).send({ message: "Please send emailID as request parameter" });
                 return;
             }
             const retailerRepository = new RetailerRepository();

@@ -27,6 +27,26 @@ const controller = {
             console.log(err);
             res.status(500).send(err.toString())
         }
+    },
+    validateEmail: async (req, res, next) => {
+        try {
+            const emailID = req.query.emailID;
+            //TODO : EMAIL format validation
+            if (!emailID) {
+                res.status(400).send({ message: "Please send emailID as request parameter" });
+                return;
+            }
+            const supplierRepository = new SupplierRepository();
+            const result = await supplierRepository.getByEmailID(req.db, emailID);
+            if (!result || result.length < 1) {
+                res.status(200).send({ message: "EMail ID does not exists" });
+                return;
+            }
+            res.status(400).send({ message: "EMail ID already exists", data: result });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.toString())
+        }
     }
 }
 module.exports = controller;

@@ -31,5 +31,12 @@ class SupplierRepository {
         })
         return GSTREGSEQID;
     }
+    async getByEmailID(dbClient, emailID) {
+        const query = `SELECT * FROM T_GUEST_REGISTERATION WHERE EMAIL_ID = ?`;
+        const [result] = await dbClient.query(query, {
+            replacements: [emailID]
+        });
+        return result
+    }
 };
 module.exports = SupplierRepository;
