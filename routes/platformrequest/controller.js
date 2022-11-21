@@ -1,33 +1,30 @@
 const RetailerRepository = require("./repository")
+const CommonRepository = require("../common/repository");
 const Ajv = require("ajv")
 const ajv = new Ajv()
 const controller = {
     registerRetailer: async (req, res, next) => {
         try {
             const action = req.query.action;
-            const retailerRepository = new RetailerRepository();
-            switch (action) {
-                case "save":
-                    req.body["STATUS"] = "SAVE";
-                    //TODO check Email ID validation
-                    const saveResult = await retailerRepository.addPlatformRequest(req.db, req.body);
-                    res.status(201).send({ PFSEQID: saveResult })
-                    break;
-                case "submit":
-                    req.body["STATUS"] = "SUBMIT";
-                    //TODO check Email ID validation
-                    const result = await retailerRepository.addPlatformRequest(req.db, req.body);
-                    res.status(201).send({ PFSEQID: result })
-                    break;
-                default:
-                    res.status(400).send({ message: "Unknown action" });
-                    break;
+            if (action !== "save" && action !== "submit") {
+                res.status(400).send({ message: "unknown action" });
+                return;
             }
+            req.body["STATUS"] = action.toUpperCase();
+            //TODO :check Email ID validation
+            //Save address
+            const commonRepository = new CommonRepository();
+            const oAddress = req.body.ADDRESS[0];
+            const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
+            req.body["ADDSEQID"] = ADDSEQID;
+            delete req.body.ADDRESS;
+            const retailerRepository = new RetailerRepository();
+            const result = await retailerRepository.addPlatformRequest(req.db, req.body);
+            res.status(201).send({ PFSEQID: result })
         } catch (err) {
             console.log(err);
             res.status(500).send(err.toString())
         }
-
     },
     getAllRequest: async (req, res, next) => {
         try {

@@ -16,5 +16,20 @@ class SupplierRepository {
         });
         return result
     }
+    async registerGuest(dbClient, body, user = "anonymous") {
+        body["CREATED_BY"] = user;
+        body["MODIFIED_BY"] = user;
+        body["STATUS"] = "SUBMIT";
+        const COLUMN_NAMES = Object.keys(body).join(",");
+        const sParam = '?,'.repeat(Object.keys(body).length).slice(0, -1);
+        const COLUMN_VALUES = Object.values(body);
+        const GSTREGSEQID = uuidv4();
+        const query = `INSERT INTO T_GUEST_REGISTERATION (GSTREGSEQID,${COLUMN_NAMES}, CREATED_ON, MODIFIED_ON ) VALUES 
+        ('${GSTREGSEQID}',${sParam},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)`;
+        await dbClient.query(query, {
+            replacements: COLUMN_VALUES
+        })
+        return GSTREGSEQID;
+    }
 };
 module.exports = SupplierRepository;

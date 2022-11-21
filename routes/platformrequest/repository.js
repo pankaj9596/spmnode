@@ -40,22 +40,6 @@ class RetailerRepository {
         return result
     }
     async addPlatformRequest(dbClient, body) {
-        let ADDSEQID;
-        if (body.ADDRESS) {
-            //Save address
-            const oAddress = body.ADDRESS[0];
-            oAddress["VALID_TO"] = '2037-12-01';
-            const ADR_COLUMN_NAMES = Object.keys(oAddress).join(",");
-            const addressParam = '?,'.repeat(Object.keys(oAddress).length).slice(0, -1);
-            ADDSEQID = uuidv4();
-            const adrQuery = `INSERT INTO T_ADDRESS (ADDSEQID,${ADR_COLUMN_NAMES}) VALUES ('${ADDSEQID}',${addressParam})`;
-            const ADR_VALUES = Object.values(oAddress);
-            await dbClient.query(adrQuery, {
-                replacements: ADR_VALUES
-            });
-            delete body.ADDRESS
-        }
-        body["ADDSEQID"] = ADDSEQID;
         const COLUMN_NAMES = Object.keys(body).join(",");
         const sParam = '?,'.repeat(Object.keys(body).length).slice(0, -1);
         const COLUMN_VALUES = Object.values(body);
@@ -67,10 +51,16 @@ class RetailerRepository {
         return PFSEQID;
     }
     async executeAction(dbClient, body, user) {
+        //TODO : Move validation part to controller
         const oPlatformRequest = await this.getPlatformRequest(dbClient, body.PFSEQID);
         if (!oPlatformRequest) {
             return {
                 status_code: 400, response: { message: "Platform request is not present" }
+            }
+        }
+        if (oPlatformRequest.STATUS === "SAVE") {
+            return {
+                status_code: 422, response: { message: "Only submitted Platform request can be approved or rejected" }
             }
         }
         if (oPlatformRequest.STATUS === "PFADMINAPPROVED" || oPlatformRequest.STATUS === "PFADMINREJECTED") {
