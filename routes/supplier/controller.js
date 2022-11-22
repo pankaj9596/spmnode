@@ -47,6 +47,39 @@ const controller = {
             console.log(err);
             res.status(500).send(err.toString())
         }
+    },
+    executeAction: async (req, res, next) => {
+        try {
+            const body = req.body[0];
+            if (!body.GSTREGSEQID || !body.ACTION) {
+                res.status(400).send({ message: "Please send GSTREGSEQID and ACTION" });
+                return;
+            }
+            if (body.ACTION !== "APPROVE" && body.ACTION !== "REJECT") {
+                res.status(400).send({ message: "unknown action" });
+                return;
+            }
+            const supplierRepository = new SupplierRepository();
+            const oGuestRequest = await supplierRepository.getGuestEntry(dbClient, body.GSTREGSEQID);
+            if (!oGuestRequest) {
+                res.status(400).send({ message: "Guest Request is not present." });
+                return;
+            }
+            if (oGuestRequest.STATUS === "SAVE") {
+                res.status(422).send({ message: "Only Submitted Guest request can be approved or rejected" });
+                return;
+            }
+            if (oGuestRequest.STATUS === "APPROVED" || oGuestRequest.STATUS === "REJECTED") {
+                res.status(422).send({ message: "Guest Request is already approved or rejected" });
+                return;
+            }
+            const user = req.User || "anonymous";
+            const { status_code, response } = await supplierRepository.executeAction(req.db, body, user);
+            res.status(status_code).send(response);
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.toString())
+        }
     }
 }
 module.exports = controller;

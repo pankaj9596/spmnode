@@ -99,10 +99,14 @@ const getBatchData = async (req, res, next) => {
         "PAYMENT-METHOD": "getPaymentMethod",
         "ADDRESSTYPE": "getAddressType",
         "VENDORTYPE": "getVendorType",
-        "EMP-COUNT-FOR-STORE": "getEmpCountForStore"
+        "EMP-COUNT-FOR-STORE": "getEmpCountForStore",
+        "CONTACT-TYPE": "getContactType",
+        "CREDITPERIOD": "getCreditPeriod",
+        "SHOPPINGCONDN": "getShoppingConditions",
+        "RECONCACCNT": "getReconcilationAccountPicklist"
     }
-    if (!body) {
-        res.status(400).send("Please send object list");
+    if (!Array.isArray(body)) {
+        res.status(400).send({ message: "Please send object list in Array" });
         return;
     }
     const masterRepository = new MasterRepository();

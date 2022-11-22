@@ -38,5 +38,8 @@ class SupplierRepository {
         });
         return result
     }
+    async executeAction(dbClient, body, user) {
+
+    }
 };
 module.exports = SupplierRepository;

@@ -5,7 +5,11 @@ module.exports = async function (app, sequelizeConn) {
         req.db = sequelizeConn;
         next();
     });
-    app.use(bodyparser.json({ limit: "100mb" }))
+    app.use(bodyparser.json({ limit: "100mb" }));
+    app.use((req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        next();
+    })
     require("../routes")(app);
     app.get("/", (req, res) => res.send("Server is running fine....!!!!"));
 }
