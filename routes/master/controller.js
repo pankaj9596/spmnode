@@ -62,7 +62,29 @@ const getEmpCountForStore = async (req, res, next) => {
     const result = await masterRepository.getEmpCountForStore(req.db);
     res.status(200).send(result);
 };
+const getContactType = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getContactType(req.db);
+    res.status(200).send(result);
+};
 
+const getCreditPeriod = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getCreditPeriod(req.db);
+    res.status(200).send(result);
+};
+
+const getShoppingConditions = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getShoppingConditions(req.db);
+    res.status(200).send(result);
+};
+
+const getReconcilationAccountPicklist = async (req, res, next) => {
+    const masterRepository = new MasterRepository();
+    const result = await masterRepository.getReconcilationAccountPicklist(req.db);
+    res.status(200).send(result);
+};
 const getBatchData = async (req, res, next) => {
     const body = req.body;
     const mapping = {
@@ -94,5 +116,6 @@ const getBatchData = async (req, res, next) => {
 }
 module.exports = {
     getTitle, getOwnerShipList, getBusinessCode, getBatchData, getStoreFormat, getCountryCode, getState,
-    getDepartment, getSubDepartment, getPaymentMethod, getAddressType, getVendorType, getEmpCountForStore,
+    getDepartment, getSubDepartment, getPaymentMethod, getAddressType, getVendorType, getEmpCountForStore, getContactType,
+    getCreditPeriod, getShoppingConditions, getReconcilationAccountPicklist
 }

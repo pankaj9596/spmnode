@@ -62,6 +62,26 @@ class MasterRepository {
         const [result] = await dbClient.query(query)
         return result
     }
+    async getContactType(dbClient) {
+        const query = "SELECT * FROM T_OBJECT_MASTER WHERE OBJECT_TYPE = 'CONTACTTYPE' AND VALID_TO > CURRENT_TIMESTAMP ORDER BY OBJECT_CODE ASC";
+        const [result] = await dbClient.query(query)
+        return result
+    }
+    async getCreditPeriod(dbClient) {
+        const query = "SELECT * FROM T_OBJECT_MASTER WHERE OBJECT_TYPE = 'CREDITPERIOD' AND VALID_TO > CURRENT_TIMESTAMP ORDER BY OBJECT_CODE ASC";
+        const [result] = await dbClient.query(query)
+        return result
+    }
+    async getShoppingConditions(dbClient) {
+        const query = "SELECT * FROM T_OBJECT_MASTER WHERE OBJECT_TYPE = 'SHOPCONDITIONS' AND VALID_TO > CURRENT_TIMESTAMP ORDER BY OBJECT_CODE ASC";
+        const [result] = await dbClient.query(query)
+        return result
+    }
+    async getReconcilationAccountPicklist(dbClient) {
+        const query = "SELECT * FROM T_OBJECT_MASTER WHERE OBJECT_TYPE = 'RECONCACCOUNTS' AND VALID_TO > CURRENT_TIMESTAMP ORDER BY OBJECT_CODE ASC";
+        const [result] = await dbClient.query(query)
+        return result
+    }
 }
 
 module.exports = MasterRepository

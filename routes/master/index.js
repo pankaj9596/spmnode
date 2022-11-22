@@ -14,4 +14,8 @@ router.get("/payment-method", controller.getPaymentMethod);
 router.get("/addresstype", controller.getAddressType);
 router.get("/vendortype", controller.getVendorType);
 router.get("/emp-count-for-store", controller.getEmpCountForStore);
+router.get("/contacttype", controller.getContactType);
+router.get("/creditperiod", controller.getCreditPeriod);
+router.get("/reconcilation-account-picklist", controller.getReconcilationAccountPicklist);
+router.get("/shopping-conditions", controller.getShoppingConditions);
 module.exports = router;
