@@ -60,7 +60,7 @@ const controller = {
                 return;
             }
             const supplierRepository = new SupplierRepository();
-            const oGuestRequest = await supplierRepository.getGuestEntry(dbClient, body.GSTREGSEQID);
+            const oGuestRequest = await supplierRepository.getGuestEntry(req.db, body.GSTREGSEQID);
             if (!oGuestRequest) {
                 res.status(400).send({ message: "Guest Request is not present." });
                 return;
@@ -74,7 +74,7 @@ const controller = {
                 return;
             }
             const user = req.User || "anonymous";
-            const { status_code, response } = await supplierRepository.executeAction(req.db, body, user);
+            const { status_code, response } = await supplierRepository.executeAction(req.db, body, user, oGuestRequest);
             res.status(status_code).send(response);
         } catch (err) {
             console.log(err);
