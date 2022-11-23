@@ -80,6 +80,16 @@ const controller = {
             console.log(err);
             res.status(500).send(err.toString())
         }
+    },
+    getAllSupplier: async (req, res, next) => {
+        try {
+            const supplierRepository = new SupplierRepository();
+            const result = await supplierRepository.getAllSupplier(req.db, req.query);
+            res.status(200).send(result);
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.toString())
+        }
     }
 }
 module.exports = controller;
