@@ -55,19 +55,20 @@ class SupplierRepository {
                 replacements: [VENDMSTRSEQID, "APPROVED", body.REMARKS, user, body.GSTREGSEQID]
             });
 
-            ["GSTREGSEQID", "STATUS", "PH_COUNTRY_CODE", "MODIFIED_ON", "VENDOR_CREATED", "VENDOR_CREATED_ON",
+            ["STATUS", "PH_COUNTRY_CODE", "MODIFIED_BY", "MODIFIED_ON", "VENDOR_CREATED", "VENDOR_CREATED_ON",
                 "ALT_PH_COUNTRY_CODE", "ALTERNATE_PHN_NUMBER", "FAX_NUMBER", "NATURE_OF_BUSINESS",
                 "DEPARTMENT", "SUBDEPARTMENT", "PRIMARY_CONTACT_NAME", "GENERATED_ID",
-                "RET_REMARKS",
+                "RET_REMARKS", "CREATED_BY", "CREATED_ON",
                 "RET_ACTIONED_BY", "RET_ACTIONED_ON"].forEach(element => delete oGuestRequest[element]);
 
             //TODO : create method for insert 
             const COLUMN_NAMES = Object.keys(oGuestRequest).join(",");
             const sParam = '?,'.repeat(Object.keys(oGuestRequest).length).slice(0, -1);
             const COLUMN_VALUES = Object.values(oGuestRequest);
-            const vendorQuery = `INSERT INTO T_VENDOR_MASTER  (VENDMSTRSEQID,${COLUMN_NAMES}) VALUES ('${VENDMSTRSEQID}',${sParam})`;
+            const vendorQuery = `INSERT INTO T_VENDOR_MASTER  (VENDMSTRSEQID,${COLUMN_NAMES},CREATED_ON,CREATED_BY,MODIFIED_ON,MODIFIED_BY) 
+            VALUES ('${VENDMSTRSEQID}',${sParam},current_timestamp,?,current_timestamp,?)`;
             await dbClient.query(vendorQuery, {
-                replacements: COLUMN_VALUES
+                replacements: [...COLUMN_VALUES, user, user]
             });
         } else if (body.ACTION === "REJECT") {
             const query = `UPDATE T_GUEST_REGISTERATION SET  STATUS = ?, RET_REMARKS = ?, RET_ACTIONED_ON = current_timestamp ,

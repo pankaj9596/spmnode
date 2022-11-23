@@ -1,6 +1,6 @@
 @echo off
 echo "Deploying to GCP"
-echo "Building image..."
+echo Building image...
 docker build -t spusermgmtnode:v1 .
 echo "Image built successfully"
 gcloud config set project sportal-362901
