@@ -69,10 +69,10 @@ const controller = {
                 res.status(422).send({ message: "Only Submitted Guest request can be approved or rejected" });
                 return;
             }
-            if (oGuestRequest.STATUS === "APPROVED" || oGuestRequest.STATUS === "REJECTED") {
-                res.status(422).send({ message: "Guest Request is already approved or rejected" });
-                return;
-            }
+            // if (oGuestRequest.STATUS === "APPROVED" || oGuestRequest.STATUS === "REJECTED") {
+            //     res.status(422).send({ message: "Guest Request is already approved or rejected" });
+            //     return;
+            // }
             const user = req.User || "anonymous";
             const { status_code, response } = await supplierRepository.executeAction(req.db, body, user, oGuestRequest);
             res.status(status_code).send(response);

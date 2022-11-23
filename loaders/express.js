@@ -8,6 +8,8 @@ module.exports = async function (app, sequelizeConn) {
     app.use(bodyparser.json({ limit: "100mb" }));
     app.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE')
+        res.setHeader('Access-Control-Allow-Headers', '*');
         next();
     })
     require("../routes")(app);
