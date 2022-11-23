@@ -1,3 +1,4 @@
+const { createFilter } = require('odata-v4-mysql');
 class MasterRepository {
     constructor() {
 
@@ -32,14 +33,28 @@ class MasterRepository {
         const [result] = await dbClient.query(query)
         return result
     }
-    async getDepartment(dbClient) {
-        const query = "SELECT DEPSEQID,DEPT_CODE,DEPT_DESC FROM T_DEPARTMENT WHERE ACTIVE = TRUE AND VALID_TO > CURRENT_TIMESTAMP";
-        const [result] = await dbClient.query(query)
+    async getDepartment(dbClient, queryParam) {
+        let query = "SELECT DEPSEQID,DEPT_CODE,DEPT_DESC FROM T_DEPARTMENT WHERE ACTIVE = TRUE AND VALID_TO > CURRENT_TIMESTAMP", aParam = [];
+        if (queryParam.$filter) {
+            const filter = createFilter(queryParam.$filter);
+            query += ` AND ${filter.where}`;
+            aParam.push(...filter.parameters);
+        }
+        const [result] = await dbClient.query(query, {
+            replacements: aParam
+        });
         return result
     }
-    async getSubDepartment(dbClient) {
-        const query = "SELECT SUBDEPSEQID,DEPSEQID,SUB_DEPT_CODE,SUB_DEPT_DESC  FROM T_SUB_DEPARTMENT WHERE ACTIVE = TRUE AND VALID_TO > CURRENT_TIMESTAMP";
-        const [result] = await dbClient.query(query)
+    async getSubDepartment(dbClient, queryParam) {
+        let query = "SELECT SUBDEPSEQID,DEPSEQID,SUB_DEPT_CODE,SUB_DEPT_DESC  FROM T_SUB_DEPARTMENT WHERE ACTIVE = TRUE AND VALID_TO > CURRENT_TIMESTAMP", aParam = [];
+        if (queryParam.$filter) {
+            const filter = createFilter(queryParam.$filter);
+            query += ` AND ${filter.where}`;
+            aParam.push(...filter.parameters);
+        }
+        const [result] = await dbClient.query(query, {
+            replacements: aParam
+        });
         return result
     }
     async getPaymentMethod(dbClient) {
