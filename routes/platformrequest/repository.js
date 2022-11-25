@@ -50,6 +50,15 @@ class RetailerRepository {
         })
         return PFSEQID;
     }
+    async updatePlatformRequest(dbClient, body, PFSEQID) {
+        const COLUMN_NAMES = Object.keys(body).join(" = ?, ");
+        const COLUMN_VALUES = Object.values(body);
+        const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${COLUMN_NAMES} = ? WHERE PFSEQID = ?`;
+        await dbClient.query(query, {
+            replacements: [...COLUMN_VALUES, PFSEQID]
+        })
+        return PFSEQID;
+    }
     async executeAction(dbClient, body, user) {
         //TODO : Move validation part to controller
         const oPlatformRequest = await this.getPlatformRequest(dbClient, body.PFSEQID);

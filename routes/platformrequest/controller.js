@@ -12,15 +12,32 @@ const controller = {
             }
             req.body["STATUS"] = action.toUpperCase();
             //TODO :check Email ID validation
-            //Save address
             const commonRepository = new CommonRepository();
-            const oAddress = req.body.ADDRESS[0];
-            const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
-            req.body["ADDSEQID"] = ADDSEQID;
+            if (req.body["ADDSEQID"]) {
+                //Update Address
+                const oAddress = req.body.ADDRESS[0];
+                await commonRepository.updateAddress(req.db, oAddress, req.body["ADDSEQID"]);
+            } else {
+                //Create Address
+                const oAddress = req.body.ADDRESS[0];
+                const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
+                req.body["ADDSEQID"] = ADDSEQID;
+            }
             delete req.body.ADDRESS;
-            const retailerRepository = new RetailerRepository();
-            const result = await retailerRepository.addPlatformRequest(req.db, req.body);
-            res.status(201).send({ PFSEQID: result })
+            if (req.body["PFSEQID"]) {
+                //Update platform Request
+                const PFSEQID = req.body["PFSEQID"];
+                delete req.body["PFSEQID"];
+                const retailerRepository = new RetailerRepository();
+                //TODO : check status if status = save then only update
+                const result = await retailerRepository.updatePlatformRequest(req.db, req.body, PFSEQID);
+                res.status(200).send({ PFSEQID: result })
+            } else {
+                //Create Platform Request
+                const retailerRepository = new RetailerRepository();
+                const result = await retailerRepository.addPlatformRequest(req.db, req.body);
+                res.status(201).send({ PFSEQID: result })
+            }
         } catch (err) {
             console.log(err);
             res.status(500).send(err.toString())

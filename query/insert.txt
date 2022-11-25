@@ -1,13 +1,12 @@
 insert into sp.T_NAME_TITLE values ("TIT_00001","2022_RET_00001","MR","Mr.","Mister");
 insert into sp.T_NAME_TITLE values ("TIT_00002","2022_RET_00001","MRS","Mrs.","Mistress");
 
-
-insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00001","OWNSHIP",	"10","Coporation","Ownership Type for Corporation",current_timestamp,'2037-12-31 15:52:00');
-insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00002","OWNSHIP",	"20","Joint Venture","Ownership Type for Joint Venture",current_timestamp,'2037-12-31 15:52:00');
-insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00003","OWNSHIP",	"30","Limited Liability Corporation","Ownership Type for Limited Liability Corporation",current_timestamp,'2037-12-31 15:52:00');
-insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00004","OWNSHIP",	"40","Limited Liability Partnership","Ownership Type for Limited Liability Partnership",current_timestamp,'2037-12-31 15:52:00');
-insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00005","OWNSHIP",	"50","Partnership","Ownership Type for Partnership",current_timestamp,'2037-12-31 15:52:00');
-insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00006","OWNSHIP",	"60","Sole Proprietorship","Ownership Type for Sole Proprietorship",current_timestamp,'2037-12-31 15:52:00');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00001","OWNSHIP",	"10","Coporation","Ownership Type for Corporation",current_timestamp,'2037-12-31 15:52:00','');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00002","OWNSHIP",	"20","Joint Venture","Ownership Type for Joint Venture",current_timestamp,'2037-12-31 15:52:00','');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00003","OWNSHIP",	"30","Limited Liability Corporation","Ownership Type for Limited Liability Corporation",current_timestamp,'2037-12-31 15:52:00','');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00004","OWNSHIP",	"40","Limited Liability Partnership","Ownership Type for Limited Liability Partnership",current_timestamp,'2037-12-31 15:52:00','');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00005","OWNSHIP",	"50","Partnership","Ownership Type for Partnership",current_timestamp,'2037-12-31 15:52:00','');
+insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00006","OWNSHIP",	"60","Sole Proprietorship","Ownership Type for Sole Proprietorship",current_timestamp,'2037-12-31 15:52:00','');
 
 insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00007","STOREFMT","10","Outlet Store","Store Format",current_timestamp,'2037-12-31 15:52:00');
 insert into sp.T_OBJECT_MASTER values ("2022_RET_00001","2022_OBM_00008","STOREFMT","20","Convention","Store Format",current_timestamp,'2037-12-31 15:52:00');
