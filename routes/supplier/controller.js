@@ -13,24 +13,36 @@ const controller = {
     },
     registerGuest: async (req, res, next) => {
         try {
-            //TODO :check Email ID validation 
-            const commonRepository = new CommonRepository();
-            const oAddress = req.body[0].ADDRESS[0];
-            if (req.body[0]["ADDSEQID"]) {
-                await commonRepository.updateAddress(req.db, oAddress, req.body[0]["ADDSEQID"]);
-            } else {
-                const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
-                req.body[0]["ADDSEQID"] = ADDSEQID;
-            }
-            delete req.body[0].ADDRESS;
             const supplierRepository = new SupplierRepository();
+            const commonRepository = new CommonRepository();
             if (req.body[0]["GSTREGSEQID"]) {
-                //TODO : check status if status = save then only update
                 const GSTREGSEQID = req.body[0]["GSTREGSEQID"];
+                const oGuestRequest = await supplierRepository.getGuestEntry(req.db, GSTREGSEQID);
+                if (!oGuestRequest) {
+                    res.status(400).send({ message: "Guest Request is not present." });
+                    return;
+                }
+                if (oGuestRequest.STATUS === "APPROVED" || oGuestRequest.STATUS === "REJECTED") {
+                    res.status(422).send({ message: "Approved/Rejected Guest Request can not be modified" });
+                    return;
+                }
                 delete req.body[0]["GSTREGSEQID"];
+                const oAddress = req.body[0].ADDRESS[0];
+                await commonRepository.updateAddress(req.db, oAddress, req.body[0]["ADDSEQID"]);
+                delete req.body[0].ADDRESS;
                 await supplierRepository.updateGuest(req.db, req.body[0], GSTREGSEQID, req.user);
                 res.status(200).send({ GSTREGSEQID })
             } else {
+                const emailID = req.body[0]["EMAIL_ID"];
+                const resp = await supplierRepository.getByEmailID(req.db, emailID);
+                if (resp?.length > 0) {
+                    res.status(400).send({ message: `EMail ID: ${emailID} already exists` });
+                    return;
+                }
+                const oAddress = req.body[0].ADDRESS[0];
+                const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
+                req.body[0]["ADDSEQID"] = ADDSEQID;
+                delete req.body[0].ADDRESS;
                 const result = await supplierRepository.registerGuest(req.db, req.body[0], req.user);
                 res.status(201).send({ GSTREGSEQID: result })
             }
@@ -76,7 +88,7 @@ const controller = {
                 res.status(400).send({ message: "Guest Request is not present." });
                 return;
             }
-            if (oGuestRequest.STATUS === "SAVE") {
+            if (oGuestRequest.STATUS !== "SUBMIT") {
                 res.status(422).send({ message: "Only Submitted Guest request can be approved or rejected" });
                 return;
             }
