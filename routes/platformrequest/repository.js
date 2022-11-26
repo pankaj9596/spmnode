@@ -26,10 +26,10 @@ class RetailerRepository {
     async updatePlatformRequest(dbClient, oPlatformRequest, PFSEQID) {
 
         const sFields = Object.keys(oPlatformRequest).join(" = ? ,");
-        const sParam = Object.values(oPlatformRequest);
+        const aParam = Object.values(oPlatformRequest);
         const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${sFields} = ? WHERE PFSEQID = ?`;
         await dbClient.query(query, {
-            replacements: [...sParam, PFSEQID]
+            replacements: [...aParam, PFSEQID]
         });
     }
     async getByEmailID(dbClient, emailID) {

@@ -14,23 +14,26 @@ const controller = {
     registerGuest: async (req, res, next) => {
         try {
             //TODO :check Email ID validation 
-
             const commonRepository = new CommonRepository();
             const oAddress = req.body[0].ADDRESS[0];
             if (req.body[0]["ADDSEQID"]) {
-                //Update Address
                 await commonRepository.updateAddress(req.db, oAddress, req.body[0]["ADDSEQID"]);
             } else {
-                //Create Address
                 const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
                 req.body[0]["ADDSEQID"] = ADDSEQID;
             }
             delete req.body[0].ADDRESS;
-            //TODO : update guest if guestreqid is present
-            //TODO : check status if status = save then only update
             const supplierRepository = new SupplierRepository();
-            const result = await supplierRepository.registerGuest(req.db, req.body[0], req.user);
-            res.status(201).send({ GSTREGSEQID: result })
+            if (req.body[0]["GSTREGSEQID"]) {
+                //TODO : check status if status = save then only update
+                const GSTREGSEQID = req.body[0]["GSTREGSEQID"];
+                delete req.body[0]["GSTREGSEQID"];
+                await supplierRepository.updateGuest(req.db, req.body[0], GSTREGSEQID, req.user);
+                res.status(200).send({ GSTREGSEQID })
+            } else {
+                const result = await supplierRepository.registerGuest(req.db, req.body[0], req.user);
+                res.status(201).send({ GSTREGSEQID: result })
+            }
         } catch (err) {
             console.log(err);
             res.status(500).send(err.toString())

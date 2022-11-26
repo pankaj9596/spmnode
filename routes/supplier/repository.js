@@ -8,7 +8,7 @@ class SupplierRepository {
         let query = `SELECT * FROM T_GUEST_REGISTERATION`, aParam = [];
         if (queryParam.$filter) {
             const filter = createFilter(queryParam.$filter);
-            query += ` AND ${filter.where}`;
+            query += ` WHERE ${filter.where}`;
             aParam.push(...filter.parameters);
         }
         const [result] = await dbClient.query(query, {
@@ -35,6 +35,16 @@ class SupplierRepository {
         ('${GSTREGSEQID}',${sParam},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)`;
         await dbClient.query(query, {
             replacements: COLUMN_VALUES
+        })
+        return GSTREGSEQID;
+    }
+    async updateGuest(dbClient, body, GSTREGSEQID, user = "anonymous") {
+        body["MODIFIED_BY"] = user;
+        const sFields = Object.keys(body).join(" = ? ,");
+        const aParam = Object.values(body);
+        const query = `UPDATE T_GUEST_REGISTERATION SET ${sFields} = ?, MODIFIED_ON = CURRENT_TIMESTAMP WHERE GSTREGSEQID = ?`;
+        await dbClient.query(query, {
+            replacements: [...aParam, GSTREGSEQID]
         })
         return GSTREGSEQID;
     }
