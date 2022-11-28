@@ -24,7 +24,6 @@ class RetailerRepository {
         return result[0]
     }
     async updatePlatformRequest(dbClient, oPlatformRequest, PFSEQID) {
-
         const sFields = Object.keys(oPlatformRequest).join(" = ? ,");
         const aParam = Object.values(oPlatformRequest);
         const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${sFields} = ? WHERE PFSEQID = ?`;
@@ -47,15 +46,6 @@ class RetailerRepository {
         const query = `INSERT INTO T_PLATFORM_REQ_MASTER (PFSEQID,${COLUMN_NAMES}) VALUES ('${PFSEQID}',${sParam})`;
         await dbClient.query(query, {
             replacements: COLUMN_VALUES
-        })
-        return PFSEQID;
-    }
-    async updatePlatformRequest(dbClient, body, PFSEQID) {
-        const COLUMN_NAMES = Object.keys(body).join(" = ?, ");
-        const COLUMN_VALUES = Object.values(body);
-        const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${COLUMN_NAMES} = ? WHERE PFSEQID = ?`;
-        await dbClient.query(query, {
-            replacements: [...COLUMN_VALUES, PFSEQID]
         })
         return PFSEQID;
     }

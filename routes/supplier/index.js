@@ -2,7 +2,8 @@ const express = require("express");
 const controller = require("./controller");
 const router = express.Router();
 router.route("/")
-    .get(controller.getAllSupplier);
+    .get(controller.getAllSupplier)
+    .post(controller.updateSupplier);
 router.route("/guest")
     .get(controller.getAllGuest)
     .post(controller.registerGuest);

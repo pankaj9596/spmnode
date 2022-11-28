@@ -113,6 +113,19 @@ const controller = {
             console.log(err);
             res.status(500).send(err.toString())
         }
+    },
+    updateSupplier: async (req, res, next) => {
+        try {
+            const oSupplier = req.body[0];
+            const VENDMSTRSEQID = oSupplier.VENDMSTRSEQID;
+            delete oSupplier.VENDMSTRSEQID;
+            const supplierRepository = new SupplierRepository();
+            const result = await supplierRepository.updateSupplier(req.db, oSupplier, VENDMSTRSEQID);
+            res.status(204).send();
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.toString())
+        }
     }
 }
 module.exports = controller;
