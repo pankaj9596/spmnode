@@ -29,7 +29,7 @@ const controller = {
                 delete req.body.ADDRESS;
                 delete req.body["PFSEQID"];
                 const result = await retailerRepository.updatePlatformRequest(req.db, req.body, PFSEQID);
-                req.body.ADDRESS = oAddress;
+                req.body.ADDRESS = [oAddress];
                 req.body.PFSEQID = PFSEQID;
                 res.status(200).send(req.body)
             } else {
@@ -44,7 +44,7 @@ const controller = {
                 req.body["ADDSEQID"] = ADDSEQID;
                 delete req.body.ADDRESS;
                 const PFSEQID = await retailerRepository.addPlatformRequest(req.db, req.body, req.user);
-                req.body.ADDRESS = oAddress;
+                req.body.ADDRESS = [oAddress];
                 req.body.PFSEQID = PFSEQID;
                 res.status(201).send(req.body)
             }

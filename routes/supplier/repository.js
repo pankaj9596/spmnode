@@ -24,27 +24,23 @@ class SupplierRepository {
         return result[0]
     }
     async registerGuest(dbClient, body, user = "anonymous") {
-        body["CREATED_BY"] = user;
-        body["MODIFIED_BY"] = user;
-        body["STATUS"] = "SUBMIT";
-        const COLUMN_NAMES = Object.keys(body).join(",");
+        const sFields = Object.keys(body).join(",");
         const sParam = '?,'.repeat(Object.keys(body).length).slice(0, -1);
-        const COLUMN_VALUES = Object.values(body);
+        const aParam = Object.values(body);
         const GSTREGSEQID = uuidv4();
-        const query = `INSERT INTO T_GUEST_REGISTERATION (GSTREGSEQID,${COLUMN_NAMES}, CREATED_ON, MODIFIED_ON ) VALUES 
-        ('${GSTREGSEQID}',${sParam},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)`;
+        const query = `INSERT INTO T_GUEST_REGISTERATION (GSTREGSEQID,${sFields}, STATUS, CREATED_BY, CREATED_ON, MODIFIED_BY, MODIFIED_ON ) VALUES 
+        ('${GSTREGSEQID}',${sParam},?,?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP)`;
         await dbClient.query(query, {
-            replacements: COLUMN_VALUES
+            replacements: [...aParam, "SUBMIT", user, user]
         })
         return GSTREGSEQID;
     }
     async updateGuest(dbClient, body, GSTREGSEQID, user = "anonymous") {
-        body["MODIFIED_BY"] = user;
         const sFields = Object.keys(body).join(" = ? ,");
         const aParam = Object.values(body);
-        const query = `UPDATE T_GUEST_REGISTERATION SET ${sFields} = ?, MODIFIED_ON = CURRENT_TIMESTAMP WHERE GSTREGSEQID = ?`;
+        const query = `UPDATE T_GUEST_REGISTERATION SET ${sFields} = ?, MODIFIED_BY = ?, MODIFIED_ON = CURRENT_TIMESTAMP WHERE GSTREGSEQID = ?`;
         await dbClient.query(query, {
-            replacements: [...aParam, GSTREGSEQID]
+            replacements: [...aParam, user, GSTREGSEQID]
         })
         return GSTREGSEQID;
     }
@@ -59,16 +55,17 @@ class SupplierRepository {
         if (body.ACTION === "APPROVE") {
             const VENDMSTRSEQID = uuidv4();
             //TODO : create method for update code
-            const query = `UPDATE T_GUEST_REGISTERATION SET GENERATED_ID = ?, STATUS = ?, RET_REMARKS = ?, RET_ACTIONED_ON = current_timestamp ,
-            RET_ACTIONED_BY = ?, VENDOR_CREATED = true , VENDOR_CREATED_ON = current_timestamp WHERE GSTREGSEQID = ?`;
+            const query = `UPDATE T_GUEST_REGISTERATION SET GENERATED_ID = ?, STATUS = ?, RET_REMARKS = ?, RET_ACTIONED_ON = current_timestamp,
+            RET_ACTIONED_BY = ?, VENDOR_CREATED = true , VENDOR_CREATED_ON = current_timestamp, 
+            MODIFIED_BY = ?, MODIFIED_ON = CURRENT_TIMESTAMP WHERE GSTREGSEQID = ?`;
             await dbClient.query(query, {
-                replacements: [VENDMSTRSEQID, "APPROVED", body.REMARKS, user, body.GSTREGSEQID]
+                replacements: [VENDMSTRSEQID, "APPROVED", body.REMARKS, user, user, body.GSTREGSEQID]
             });
 
-            ["STATUS", "PH_COUNTRY_CODE", "MODIFIED_BY", "MODIFIED_ON", "VENDOR_CREATED", "VENDOR_CREATED_ON",
+            ["STATUS", "PH_COUNTRY_CODE", "VENDOR_CREATED", "VENDOR_CREATED_ON",
                 "ALT_PH_COUNTRY_CODE", "ALTERNATE_PHN_NUMBER", "FAX_NUMBER", "NATURE_OF_BUSINESS",
                 "DEPARTMENT", "SUBDEPARTMENT", "PRIMARY_CONTACT_NAME", "GENERATED_ID",
-                "RET_REMARKS", "CREATED_BY", "CREATED_ON",
+                "RET_REMARKS", "CREATED_BY", "CREATED_ON", "MODIFIED_BY", "MODIFIED_ON",
                 "RET_ACTIONED_BY", "RET_ACTIONED_ON"].forEach(element => delete oGuestRequest[element]);
 
             //TODO : create method for insert 
@@ -82,9 +79,9 @@ class SupplierRepository {
             });
         } else if (body.ACTION === "REJECT") {
             const query = `UPDATE T_GUEST_REGISTERATION SET  STATUS = ?, RET_REMARKS = ?, RET_ACTIONED_ON = current_timestamp ,
-            RET_REMARKS = ?,VENDOR_CREATED = false WHERE GSTREGSEQID = ?`;
+            RET_REMARKS = ?,VENDOR_CREATED = false, MODIFIED_BY = ?, MODIFIED_ON = CURRENT_TIMESTAMP WHERE GSTREGSEQID = ?`;
             await dbClient.query(query, {
-                replacements: ["REJECTED", body.REMARKS, user, body.GSTREGSEQID]
+                replacements: ["REJECTED", body.REMARKS, user, user, body.GSTREGSEQID]
             })
         }
         return {
@@ -103,12 +100,12 @@ class SupplierRepository {
         });
         return result
     }
-    async updateSupplier(dbClient, oSupplier, VENDMSTRSEQID) {
+    async updateSupplier(dbClient, oSupplier, VENDMSTRSEQID, user = "anonymous") {
         const sFields = Object.keys(oSupplier).join(" = ? ,");
         const aParam = Object.values(oSupplier);
-        const query = `UPDATE T_VENDOR_MASTER SET ${sFields} = ? WHERE VENDMSTRSEQID = ?`;
+        const query = `UPDATE T_VENDOR_MASTER SET ${sFields} = ?, MODIFIED_BY = ?, MODIFIED_ON = CURRENT_TIMESTAMP WHERE VENDMSTRSEQID = ?`;
         const [result] = await dbClient.query(query, {
-            replacements: [...aParam, VENDMSTRSEQID]
+            replacements: [...aParam, user, VENDMSTRSEQID]
         });
         return result;
     }

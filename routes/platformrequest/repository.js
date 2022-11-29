@@ -26,12 +26,12 @@ class RetailerRepository {
         });
         return result[0]
     }
-    async updatePlatformRequest(dbClient, oPlatformRequest, PFSEQID) {
+    async updatePlatformRequest(dbClient, oPlatformRequest, PFSEQID, user = "anonymous") {
         const sFields = Object.keys(oPlatformRequest).join(" = ? ,");
         const aParam = Object.values(oPlatformRequest);
-        const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${sFields} = ? WHERE PFSEQID = ?`;
+        const query = `UPDATE T_PLATFORM_REQ_MASTER SET ${sFields} = ?, MODIFIED_BY = ?,MODIFIED_ON = CURRENT_TIMESTAMP WHERE PFSEQID = ?`;
         await dbClient.query(query, {
-            replacements: [...aParam, PFSEQID]
+            replacements: [...aParam, user, PFSEQID]
         });
     }
     async getByEmailID(dbClient, emailID) {
@@ -76,9 +76,9 @@ class RetailerRepository {
             const RETSEQID = uuidv4();
 
             const query = `UPDATE T_PLATFORM_REQ_MASTER SET GENERATED_ID = ?, STATUS = ?, PF_ADMIN_REMARKS = ?, PF_ACTIONED_ON = current_timestamp ,
-            PF_ACTIONED_BY = ? WHERE PFSEQID = ?`;
+            PF_ACTIONED_BY = ?, MODIFIED_BY = ?,MODIFIED_ON = CURRENT_TIMESTAMP WHERE PFSEQID = ?`;
             await dbClient.query(query, {
-                replacements: [RETSEQID, "PFADMINAPPROVED", body.REMARKS, user, body.PFSEQID]
+                replacements: [RETSEQID, "PFADMINAPPROVED", body.REMARKS, user, user, body.PFSEQID]
             });
 
             ["PFSEQID", "REQ_TYPE", "TENANT_ID", "GENERATED_ID", "PRIMARY_CONTACT_NAME", "STATUS", "PF_ADMIN_REMARKS",
@@ -96,9 +96,9 @@ class RetailerRepository {
 
         } else if (body.ACTION === "REJECT") {
             const query = `UPDATE T_PLATFORM_REQ_MASTER SET  STATUS = ?, PF_ADMIN_REMARKS = ?, PF_ACTIONED_ON = current_timestamp ,
-            PF_ACTIONED_BY = ? WHERE PFSEQID = ?`;
+            PF_ACTIONED_BY = ?, MODIFIED_BY = ?,MODIFIED_ON = CURRENT_TIMESTAMP WHERE PFSEQID = ?`;
             await dbClient.query(query, {
-                replacements: ["PFADMINREJECTED", body.REMARKS, user, body.PFSEQID]
+                replacements: ["PFADMINREJECTED", body.REMARKS, user, user, body.PFSEQID]
             })
         }
         return {
