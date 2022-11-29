@@ -15,7 +15,7 @@ const controller = {
             const retailerRepository = new RetailerRepository();
             if (req.body["PFSEQID"]) {
                 const PFSEQID = req.body["PFSEQID"];
-                const oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, PFSEQID);
+                let oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, PFSEQID);
                 if (!oPlatformRequest) {
                     res.status(400).send({ message: "Platform Request is not present." });
                     return;
@@ -29,7 +29,8 @@ const controller = {
                 delete req.body.ADDRESS;
                 delete req.body["PFSEQID"];
                 const result = await retailerRepository.updatePlatformRequest(req.db, req.body, PFSEQID);
-                res.status(200).send({ PFSEQID: result })
+                oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, PFSEQID);
+                res.status(200).send(oPlatformRequest)
             } else {
                 const emailID = req.body["EMAIL_ID"];
                 const resp = await retailerRepository.getByEmailID(req.db, emailID);
@@ -41,8 +42,9 @@ const controller = {
                 const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
                 req.body["ADDSEQID"] = ADDSEQID;
                 delete req.body.ADDRESS;
-                const result = await retailerRepository.addPlatformRequest(req.db, req.body);
-                res.status(201).send({ PFSEQID: result })
+                const PFSEQID = await retailerRepository.addPlatformRequest(req.db, req.body, req.user);
+                const oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, PFSEQID);
+                res.status(201).send(oPlatformRequest)
             }
         } catch (err) {
             console.log(err);

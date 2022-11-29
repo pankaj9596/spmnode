@@ -106,7 +106,6 @@ class SupplierRepository {
     async updateSupplier(dbClient, oSupplier, VENDMSTRSEQID) {
         const sFields = Object.keys(oSupplier).join(" = ? ,");
         const aParam = Object.values(oSupplier);
-        console.log(aParam)
         const query = `UPDATE T_VENDOR_MASTER SET ${sFields} = ? WHERE VENDMSTRSEQID = ?`;
         const [result] = await dbClient.query(query, {
             replacements: [...aParam, VENDMSTRSEQID]
