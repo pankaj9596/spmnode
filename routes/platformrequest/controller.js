@@ -29,8 +29,9 @@ const controller = {
                 delete req.body.ADDRESS;
                 delete req.body["PFSEQID"];
                 const result = await retailerRepository.updatePlatformRequest(req.db, req.body, PFSEQID);
-                oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, PFSEQID);
-                res.status(200).send(oPlatformRequest)
+                req.body.ADDRESS = oAddress;
+                req.body.PFSEQID = PFSEQID;
+                res.status(200).send(req.body)
             } else {
                 const emailID = req.body["EMAIL_ID"];
                 const resp = await retailerRepository.getByEmailID(req.db, emailID);
@@ -43,8 +44,9 @@ const controller = {
                 req.body["ADDSEQID"] = ADDSEQID;
                 delete req.body.ADDRESS;
                 const PFSEQID = await retailerRepository.addPlatformRequest(req.db, req.body, req.user);
-                const oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, PFSEQID);
-                res.status(201).send(oPlatformRequest)
+                req.body.ADDRESS = oAddress;
+                req.body.PFSEQID = PFSEQID;
+                res.status(201).send(req.body)
             }
         } catch (err) {
             console.log(err);
