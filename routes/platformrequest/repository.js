@@ -39,7 +39,7 @@ class RetailerRepository {
         const [result] = await dbClient.query(query, {
             replacements: [emailID]
         });
-        return result
+        return result[0]
     }
     async addPlatformRequest(dbClient, body, user = "anonymous") {
         const sFields = Object.keys(body).join(",");

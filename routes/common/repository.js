@@ -24,5 +24,12 @@ class CommonRepository {
         });
         return ADDSEQID;
     }
+    async getAddress(dbClient, ADDSEQID) {
+        const query = `SELECT * FROM T_ADDRESS  WHERE ADDSEQID = ?`;
+        const [result] = await dbClient.query(query, {
+            replacements: [ADDSEQID]
+        });
+        return result[0];
+    }
 };
 module.exports = CommonRepository;

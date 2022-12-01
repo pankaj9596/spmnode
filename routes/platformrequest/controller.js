@@ -71,12 +71,15 @@ const controller = {
                 return;
             }
             const retailerRepository = new RetailerRepository();
-            const result = await retailerRepository.getByEmailID(req.db, emailID);
-            if (!result || result.length < 1) {
+            const oPlatformRequest = await retailerRepository.getByEmailID(req.db, emailID);
+            if (!oPlatformRequest) {
                 res.status(200).send({ message: "EMail ID does not exists" });
                 return;
             }
-            res.status(400).send({ message: "EMail ID already exists", data: result });
+            const commonRepository = new CommonRepository();
+            const oAddress = await commonRepository.getAddress(req.db, oPlatformRequest["ADDSEQID"]);
+            oPlatformRequest["ADDRESS"] = [oAddress];
+            res.status(409).send({ message: "EMail ID already exists", data: oPlatformRequest });
         } catch (err) {
             console.log(err);
             res.status(500).send(err.toString())
