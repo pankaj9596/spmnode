@@ -31,5 +31,18 @@ class CommonRepository {
         });
         return result[0];
     }
+    async addUser(dbClient, oUser, transaction) {
+        const sFields = Object.keys(oUser).join(",");
+        const sParam = '?,'.repeat(Object.keys(oUser).length).slice(0, -1);
+        const USERMSTRSEQID = uuidv4();
+        const query = `INSERT INTO T_USER_MASTER (USERMSTRSEQID,${sFields}) VALUES ('${USERMSTRSEQID}',${sParam})`;
+        const aParam = Object.values(oUser);
+        let config = {
+            replacements: aParam
+        };
+        if (transaction) config.transaction = transaction;
+        await dbClient.query(query, config);
+        return USERMSTRSEQID;
+    }
 };
 module.exports = CommonRepository;

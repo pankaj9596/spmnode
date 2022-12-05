@@ -1,7 +1,8 @@
 const RetailerRepository = require("./repository")
 const CommonRepository = require("../common/repository");
-const Ajv = require("ajv")
-const ajv = new Ajv()
+const uuidv4 = require("../../util/uuid")
+// const Ajv = require("ajv")
+// const ajv = new Ajv()
 const controller = {
     registerRetailer: async (req, res, next) => {
         try {
@@ -28,7 +29,7 @@ const controller = {
                 await commonRepository.updateAddress(req.db, oAddress, req.body["ADDSEQID"]);
                 delete req.body.ADDRESS;
                 delete req.body["PFSEQID"];
-                const result = await retailerRepository.updatePlatformRequest(req.db, req.body, PFSEQID);
+                const result = await retailerRepository.updatePlatformRequest(req.db, req.body, PFSEQID, req.user);
                 req.body.ADDRESS = [oAddress];
                 req.body.PFSEQID = PFSEQID;
                 res.status(200).send(req.body)
@@ -86,25 +87,9 @@ const controller = {
         }
     },
     executeAction: async (req, res, next) => {
+        const transaction = await req.db.transaction();
         try {
             const body = req.body[0];
-            // const schema = {
-            //     type: "object",
-            //     properties: {
-            //         PFSEQID: { type: "string" },
-            //         ACTION: { type: "string" },
-            //         REMARKS: { type: "string" }
-            //     },
-            //     required: ["PFSEQID", "ACTION"],
-            //     additionalProperties: false
-            // }
-            // const validate = ajv.compile(schema)
-            // const valid = validate(body)
-            // if (!valid) {
-            //     res.status(400).send(validate.errors)
-            // }
-
-
             if (!body.PFSEQID || !body.ACTION) {
                 res.status(400).send({ message: "Please send PFSEQID and ACTION" });
                 return;
@@ -113,12 +98,55 @@ const controller = {
                 res.status(400).send({ message: "unknown action" });
                 return;
             }
-            const user = req.User || "anonymous";
             const retailerRepository = new RetailerRepository();
-            const { status_code, response } = await retailerRepository.executeAction(req.db, body, user);
-            res.status(status_code).send(response);
+            const oPlatformRequest = await retailerRepository.getPlatformRequest(req.db, body.PFSEQID);
+            if (!oPlatformRequest) {
+                res.status(400).send({ message: "Platform request is not present" });
+                return;
+            }
+            if (oPlatformRequest.STATUS === "SAVE") {
+                res.status(422).send({ message: "Only submitted Platform request can be approved or rejected" });
+                return;
+            }
+            if (oPlatformRequest.STATUS === "PFADMINAPPROVED" || oPlatformRequest.STATUS === "PFADMINREJECTED") {
+                res.status(422).send({ message: "Platform request is already approved or rejected" });
+                return;
+            }
+            if (body.ACTION === "APPROVE") {
+                ["PFSEQID", "REQ_TYPE", "TENANT_ID", "GENERATED_ID", "PRIMARY_CONTACT_NAME", "STATUS", "PF_ADMIN_REMARKS",
+                    "PF_ACTIONED_BY", "PF_ACTIONED_ON", "CREATED_BY", "CREATED_ON",
+                    "MODIFIED_BY", "MODIFIED_ON"].forEach(element => delete oPlatformRequest[element]);
+                const RETSEQID = await retailerRepository.addRetailer(req.db, oPlatformRequest, req.user, transaction);
+                await retailerRepository.updatePlatformRequest(req.db,
+                    {
+                        "GENERATED_ID": RETSEQID,
+                        "STATUS": "PFADMINAPPROVED",
+                        "PF_ADMIN_REMARKS": body.REMARKS,
+                        "PF_ACTIONED_ON": new Date(),
+                        "PF_ACTIONED_BY": req.user
+                    }, body.PFSEQID, req.user, transaction);
+                // const commonRepository = new CommonRepository();
+                // await commonRepository.addUser(req.db, {
+                //     RETSEQID,
+                //     "OBJECT_ID": "",//TODO: Need to finalize
+                //     "VALID_FROM": new Date(),
+                //     "USER_ID": 1000000, //TODO: create DB sequence
+                // }, transaction);
+            } else {
+                await retailerRepository.updatePlatformRequest(req.db,
+                    {
+
+                        "STATUS": "PFADMINREJECTED",
+                        "PF_ADMIN_REMARKS": body.REMARKS,
+                        "PF_ACTIONED_ON": new Date(),
+                        "PF_ACTIONED_BY": req.user
+                    }, body.PFSEQID, req.user);
+            }
+            await transaction.commit();
+            res.status(204).send();
         } catch (err) {
             console.log(err);
+            await transaction.rollback();
             res.status(500).send(err.toString())
         }
     }
