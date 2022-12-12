@@ -7,27 +7,27 @@ class CommonRepository {
         oAddress["VALID_TO"] = '2037-12-01';
         const sFields = Object.keys(oAddress).join(",");
         const addressParam = '?,'.repeat(Object.keys(oAddress).length).slice(0, -1);
-        const ADDSEQID = uuidv4();
-        const query = `INSERT INTO T_ADDRESS (ADDSEQID,${sFields}) VALUES ('${ADDSEQID}',${addressParam})`;
+        const ADDRESS_ID = uuidv4();
+        const query = `INSERT INTO T_ADDRESS (ADDRESS_ID,${sFields}) VALUES ('${ADDRESS_ID}',${addressParam})`;
         const VALUES = Object.values(oAddress);
         await dbClient.query(query, {
             replacements: VALUES
         });
-        return ADDSEQID;
+        return ADDRESS_ID;
     }
-    async updateAddress(dbClient, oAddress, ADDSEQID) {
+    async updateAddress(dbClient, oAddress, ADDRESS_ID) {
         const sFields = Object.keys(oAddress).join(" = ?, ");
-        const query = `UPDATE T_ADDRESS SET ${sFields} = ? WHERE ADDSEQID = ?`;
+        const query = `UPDATE T_ADDRESS SET ${sFields} = ? WHERE ADDRESS_ID = ?`;
         const aParam = Object.values(oAddress);
         await dbClient.query(query, {
-            replacements: [...aParam, ADDSEQID]
+            replacements: [...aParam, ADDRESS_ID]
         });
-        return ADDSEQID;
+        return ADDRESS_ID;
     }
-    async getAddress(dbClient, ADDSEQID) {
-        const query = `SELECT * FROM T_ADDRESS  WHERE ADDSEQID = ?`;
+    async getAddress(dbClient, ADDRESS_ID) {
+        const query = `SELECT * FROM T_ADDRESS  WHERE ADDRESS_ID = ?`;
         const [result] = await dbClient.query(query, {
-            replacements: [ADDSEQID]
+            replacements: [ADDRESS_ID]
         });
         return result[0];
     }

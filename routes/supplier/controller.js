@@ -28,7 +28,7 @@ const controller = {
                 }
                 delete req.body[0]["GSTREGSEQID"];
                 const oAddress = req.body[0].ADDRESS[0];
-                await commonRepository.updateAddress(req.db, oAddress, req.body[0]["ADDSEQID"]);
+                await commonRepository.updateAddress(req.db, oAddress, req.body[0]["ADDRESS_ID"]);
                 delete req.body[0].ADDRESS;
                 await supplierRepository.updateGuest(req.db, req.body[0], GSTREGSEQID, req.user);
                 res.status(200).send({ GSTREGSEQID })
@@ -40,8 +40,8 @@ const controller = {
                     return;
                 }
                 const oAddress = req.body[0].ADDRESS[0];
-                const ADDSEQID = await commonRepository.saveAddress(req.db, oAddress);
-                req.body[0]["ADDSEQID"] = ADDSEQID;
+                const ADDRESS_ID = await commonRepository.saveAddress(req.db, oAddress);
+                req.body[0]["ADDRESS_ID"] = ADDRESS_ID;
                 delete req.body[0].ADDRESS;
                 const result = await supplierRepository.registerGuest(req.db, req.body[0], req.user);
                 res.status(201).send({ GSTREGSEQID: result })
