@@ -47,12 +47,13 @@ class RetailerRepository {
         const sFields = Object.keys(body).join(",");
         const sParam = '?,'.repeat(Object.keys(body).length).slice(0, -1);
         const aParam = Object.values(body);
-        const PF_REQ_ID = uuidv4();
-        const query = `INSERT INTO T_PLATFORM_REQ_MASTER (PF_REQ_ID,${sFields}, CREATED_BY, CREATED_ON , MODIFIED_BY, MODIFIED_ON) 
-        VALUES ('${PF_REQ_ID}',${sParam}, ?,CURRENT_TIMESTAMP, ?,CURRENT_TIMESTAMP)`;
+        const query = `INSERT INTO T_PLATFORM_REQ_MASTER (${sFields}, CREATED_BY, CREATED_ON , MODIFIED_BY, MODIFIED_ON) 
+        VALUES (${sParam}, ?,CURRENT_TIMESTAMP, ?,CURRENT_TIMESTAMP)`;
         await dbClient.query(query, {
             replacements: [...aParam, user, user]
         })
+        const [result] = await dbClient.query(`select LAST_INSERT_ID() as PF_REQ_ID`);
+        const PF_REQ_ID = result[0].PF_REQ_ID;
         return PF_REQ_ID;
     }
     async addRetailer(dbClient, oRetailer, user, transaction) {

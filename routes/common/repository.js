@@ -4,15 +4,15 @@ class CommonRepository {
 
     }
     async saveAddress(dbClient, oAddress) {
-        oAddress["VALID_TO"] = '2037-12-01';
         const sFields = Object.keys(oAddress).join(",");
         const addressParam = '?,'.repeat(Object.keys(oAddress).length).slice(0, -1);
-        const ADDRESS_ID = uuidv4();
-        const query = `INSERT INTO T_ADDRESS (ADDRESS_ID,${sFields}) VALUES ('${ADDRESS_ID}',${addressParam})`;
+        const query = `INSERT INTO T_ADDRESS (${sFields}) VALUES (${addressParam})`;
         const VALUES = Object.values(oAddress);
         await dbClient.query(query, {
             replacements: VALUES
         });
+        const [result] = await dbClient.query(`select LAST_INSERT_ID() as ADDRESS_ID`);
+        const ADDRESS_ID = result[0].ADDRESS_ID;
         return ADDRESS_ID;
     }
     async updateAddress(dbClient, oAddress, ADDRESS_ID) {
