@@ -4,6 +4,7 @@ class CommonRepository {
 
     }
     async saveAddress(dbClient, oAddress) {
+        oAddress["VALID_FROM"] = new Date();
         const sFields = Object.keys(oAddress).join(",");
         const addressParam = '?,'.repeat(Object.keys(oAddress).length).slice(0, -1);
         const query = `INSERT INTO T_ADDRESS (${sFields}) VALUES (${addressParam})`;
